@@ -11,6 +11,9 @@ const main = () => {
   // initialize application
   const app = express();
   // config's
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  require("./src/configs/mongoose.config");
   // routing
   app.use(MainRouter);
   // error handling
