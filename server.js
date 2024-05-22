@@ -7,6 +7,7 @@ const {
 const {
   NotFoundHandler,
 } = require("./src/common/exceptions/not-found-handler");
+const { swaggerConfig } = require("./src/configs/swagger.config");
 const main = () => {
   // initialize application
   const app = express();
@@ -14,6 +15,7 @@ const main = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   require("./src/configs/mongoose.config");
+  swaggerConfig(app);
   // routing
   app.use(MainRouter);
   // error handling
