@@ -20,7 +20,12 @@ function swaggerConfig(app) {
           url: "http://localhost:5000",
         },
       ],
-      tags: [],
+      tags: [
+        {
+          name: "Auth",
+          description: "Auth Module's and Route's",
+        },
+      ],
       components: {
         securitySchemes: {
           BearerAuth: {
