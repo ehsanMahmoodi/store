@@ -14,8 +14,9 @@ const main = () => {
   // config's
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  require("./src/configs/mongoose.config");
   swaggerConfig(app);
+  require("./src/configs/mongoose.config");
+  require("./src/configs/redis.config");
   // routing
   app.use(MainRouter);
   // error handling

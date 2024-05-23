@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const { randomInt } = require("crypto");
 const generateRandomNumber = (length = 3) => {
   let min, max;
@@ -11,4 +10,3 @@ const generateRandomNumber = (length = 3) => {
   return randomInt(min, max);
 };
 module.exports = { generateRandomNumber };
-console.log(bcrypt.genSaltSync(12));
