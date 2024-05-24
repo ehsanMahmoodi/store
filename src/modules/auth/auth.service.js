@@ -5,6 +5,7 @@ const createHttpError = require("http-errors");
 const { AuthMessages } = require("./auth.messages");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { redisClient } = require("../../configs/redis.config");
 class AuthService {
   #model;
   constructor() {
@@ -49,7 +50,7 @@ class AuthService {
       userPhone: user?.phone,
       userId: user?._id,
     });
-    const refreshToken = this.signRefreshToken({
+    const refreshToken = await this.signRefreshToken({
       userPhone: user?.phone,
       userId: user?._id,
     });
@@ -65,10 +66,14 @@ class AuthService {
       expiresIn: "1h",
     });
   }
-  signRefreshToken(payload) {
-    return jwt.sign(payload, process.env.REFRESH_TOKEN, {
+  async signRefreshToken(payload) {
+    const token = jwt.sign(payload, process.env.REFRESH_TOKEN, {
       expiresIn: "1y",
     });
+    await redisClient.set(payload.userId.toString(), token, {
+      EX: 365 * 60 * 60 * 24, // 1 year
+    });
+    return token;
   }
 
   async verifyAccessToken(token, next) {
@@ -113,6 +118,9 @@ class AuthService {
       throw new createHttpError.Unauthorized(AuthMessages.Unauthorized);
     const user = await this.#model.findById(data.userId);
     if (!user) throw new createHttpError.NotFound(AuthMessages.NotFound);
+    const redisToken = await redisClient.get(user?._id.toString());
+    if (redisToken !== token)
+      throw new createHttpError.Unauthorized(AuthMessages.Unauthorized);
     return data.userId;
   }
 }
