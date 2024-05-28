@@ -25,6 +25,10 @@ function swaggerConfig(app) {
           name: "Auth",
           description: "Auth Module's and Route's",
         },
+        {
+          name: "User",
+          description: "User Module's and Route's",
+        },
       ],
       components: {
         securitySchemes: {
