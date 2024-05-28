@@ -75,8 +75,7 @@ class AuthService {
     });
     return token;
   }
-
-  async verifyAccessToken(token, next) {
+  async verifyAccessToken(token) {
     let data;
     const verifyToken = jwt.verify(
       token,
@@ -98,7 +97,7 @@ class AuthService {
     if (!user) throw new createHttpError.NotFound(AuthMessages.NotFound);
     return data.userId;
   }
-  async verifyRefreshToken(token, next) {
+  async verifyRefreshToken(token) {
     let data;
     const verifyToken = jwt.verify(
       token,
