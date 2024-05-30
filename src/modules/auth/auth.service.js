@@ -122,6 +122,18 @@ class AuthService {
       throw new createHttpError.Unauthorized(AuthMessages.Unauthorized);
     return data.userId;
   }
+  async logout(id) {
+    await this.findUserById(id);
+    let payload = { userId: id };
+    this.signAccessToken(payload);
+    await this.signRefreshToken(payload);
+    return true;
+  }
+  async findUserById(id) {
+    const user = await this.#model.findById(id);
+    if (!user) throw new createHttpError.NotFound(AuthMessages.NotFound);
+    return user;
+  }
 }
 
 module.exports = { AuthService: new AuthService() };

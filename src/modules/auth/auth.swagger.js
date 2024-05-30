@@ -159,3 +159,19 @@
  *        schema:
  *         $ref: "./#/definitions/schemas/sendOtpDef500"
  */
+/**
+ * @swagger
+ *  /auth/logout/{id}:
+ *   post:
+ *    summary: logout user
+ *    tags:
+ *      -   Auth
+ *    parameters:
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              type: string
+ *    responses:
+ *     200:
+ *      description: success
+ */

@@ -7,5 +7,6 @@ const AuthMessages = Object.freeze({
   OtpCodeNotMatch: "رمز یکبارمصرف صحیح نمی باشد.",
   LoginSuccessfully: "باموفقیت وارد شدید.",
   Unauthorized: "لطفا وارد حساب کاربری خود شوید.",
+  Logout: "از حساب کاربری خارج شدید.",
 });
 module.exports = { AuthMessages };

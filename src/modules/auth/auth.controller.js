@@ -1,6 +1,6 @@
 const autoBind = require("auto-bind");
 const { AuthService } = require("./auth.service");
-const { sendOtpValidation } = require("./auth.validations");
+const { sendOtpValidation, logoutValidation } = require("./auth.validations");
 const HttpCodes = require("http-status-codes");
 const { AuthMessages } = require("./auth.messages");
 class AuthController {
@@ -69,6 +69,22 @@ class AuthController {
       next(error);
     }
   }
-  async logout(req, res, next) {}
+  async logout(req, res, next) {
+    try {
+      const {
+        params: { id },
+      } = req;
+      await logoutValidation.validateAsync({ id });
+      await this.#service.logout(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: AuthMessages.Logout,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = { AuthController: new AuthController() };
