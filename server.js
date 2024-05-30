@@ -14,6 +14,7 @@ const main = () => {
   // config's
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(express.static("public"));
   swaggerConfig(app);
   require("./src/configs/mongoose.config");
   require("./src/configs/redis.config");

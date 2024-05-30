@@ -1,4 +1,5 @@
 const { randomInt } = require("crypto");
+const path = require("path");
 const generateRandomNumber = (length = 3) => {
   let min, max;
   min = Math.pow(10, length - 1);
@@ -9,4 +10,13 @@ const generateRandomNumber = (length = 3) => {
   }
   return randomInt(min, max);
 };
-module.exports = { generateRandomNumber };
+function ListOfImagesFromRequest(files, fileUploadPath) {
+  if (files?.length > 0) {
+    return files
+      .map((file) => path.join(fileUploadPath, file.fileName))
+      .map((item) => item.replace(/\\/g, "/"));
+  } else {
+    return [];
+  }
+}
+module.exports = { generateRandomNumber, ListOfImagesFromRequest };
