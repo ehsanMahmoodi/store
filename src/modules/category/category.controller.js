@@ -37,5 +37,34 @@ class CategoryController {
       next(error);
     }
   }
+  async getAll(req, res, next) {
+    try {
+      const categories = await this.#service.getAll();
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          categories,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async find(req, res, next) {
+    try {
+      const {
+        params: { id },
+      } = req;
+      const categories = await this.#service.findCategoryById(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          categories,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = { CategoryController: new CategoryController() };

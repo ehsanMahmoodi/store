@@ -5,6 +5,7 @@ const { CategoryMessages } = require("./category.messages");
 const {
   generateSlug,
   getNestedCategories,
+  checkValidObjectId,
 } = require("../../common/utils/functions");
 const { Types } = require("mongoose");
 class CategoryService {
@@ -57,10 +58,14 @@ class CategoryService {
     return true;
   }
   async findCategoryById(id) {
-    const category = await this.#model.findById(id);
+    checkValidObjectId(id);
+    const category = await this.#model.findById(id).lean();
     if (!category)
       throw new createHttpError.NotFound(CategoryMessages.NotFound);
     return category;
+  }
+  async getAll() {
+    return await this.#model.find({ depth: 0 }).lean();
   }
 }
 module.exports = { CategoryService: new CategoryService() };

@@ -1,6 +1,8 @@
 const { randomInt } = require("crypto");
 const path = require("path");
 const slugify = require("slugify");
+const { isValidObjectId } = require("mongoose");
+const createHttpError = require("http-errors");
 const generateRandomNumber = (length = 3) => {
   let min, max;
   min = Math.pow(10, length - 1);
@@ -27,9 +29,14 @@ const generateSlug = (text) => {
     lower: true,
   });
 };
-
+const checkValidObjectId = (id) => {
+  if (!isValidObjectId(id))
+    throw new createHttpError.BadRequest("آیدی وارد شده صحیح نمی باشد.");
+  return true;
+};
 module.exports = {
   generateRandomNumber,
   ListOfImagesFromRequest,
   generateSlug,
+  checkValidObjectId,
 };

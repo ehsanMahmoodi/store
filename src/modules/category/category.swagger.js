@@ -44,3 +44,30 @@
  *     200:
  *      description: success
  */
+/**
+ * @swagger
+ *  /category/get:
+ *   get:
+ *    summary: get all categories.
+ *    tags:
+ *      -  Category
+ *    responses:
+ *     200:
+ *      description: success
+ */
+/**
+ * @swagger
+ *  /category/find/{id}:
+ *   get:
+ *    summary: find category by id.
+ *    tags:
+ *      -  Category
+ *    parameters:
+ *         -    in: path
+ *              name: id
+ *              type: string
+ *              required: true
+ *    responses:
+ *     200:
+ *      description: success
+ */
