@@ -34,9 +34,13 @@ const checkValidObjectId = (id) => {
     throw new createHttpError.BadRequest("آیدی وارد شده صحیح نمی باشد.");
   return true;
 };
+const getImageFromRequest = (fileName, fileUploadPath) => {
+  return path.join(fileUploadPath, fileName).replace(/\\/g, "/");
+};
 module.exports = {
   generateRandomNumber,
   ListOfImagesFromRequest,
   generateSlug,
   checkValidObjectId,
+  getImageFromRequest,
 };
