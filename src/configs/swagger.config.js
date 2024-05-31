@@ -22,6 +22,10 @@ function swaggerConfig(app) {
       ],
       tags: [
         {
+          name: "Category",
+          description: "Category Module's and Route's",
+        },
+        {
           name: "Auth",
           description: "Auth Module's and Route's",
         },

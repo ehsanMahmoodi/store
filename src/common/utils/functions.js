@@ -1,5 +1,6 @@
 const { randomInt } = require("crypto");
 const path = require("path");
+const slugify = require("slugify");
 const generateRandomNumber = (length = 3) => {
   let min, max;
   min = Math.pow(10, length - 1);
@@ -19,4 +20,16 @@ function ListOfImagesFromRequest(files, fileUploadPath) {
     return [];
   }
 }
-module.exports = { generateRandomNumber, ListOfImagesFromRequest };
+const generateSlug = (text) => {
+  return slugify(text, {
+    replacement: "-",
+    trim: true,
+    lower: true,
+  });
+};
+
+module.exports = {
+  generateRandomNumber,
+  ListOfImagesFromRequest,
+  generateSlug,
+};
