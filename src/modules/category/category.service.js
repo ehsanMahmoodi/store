@@ -67,5 +67,37 @@ class CategoryService {
   async getAll() {
     return await this.#model.find({ depth: 0 }).lean();
   }
+  async update(id, categoryDto) {
+    const category = await this.findCategoryById(id);
+    // check exist category-name
+    const name = [categoryDto.fa_name, categoryDto.en_name];
+    await this.alreadyExistCategoryByName(name);
+    // check exist category-slug
+    if (categoryDto?.slug) {
+      await this.alreadyExistCategoryBySlug(categoryDto?.slug);
+      categoryDto.slug = generateSlug(categoryDto?.slug);
+    }
+    if (categoryDto?.parent) {
+      const categoryPatent = await this.findCategoryById(categoryDto?.parent);
+      categoryDto.parent = categoryPatent._id;
+      categoryDto.depth = categoryPatent.depth + 1;
+      categoryDto.parents = [
+        ...new Set(
+          [categoryPatent._id.toString()]
+            .concat(categoryPatent.parents.map((id) => id.toString()))
+            .map((id) => new Types.ObjectId(id)),
+        ),
+      ];
+    }
+    const updateCategory = await this.#model.updateOne(
+      { _id: id },
+      { $set: categoryDto },
+    );
+    if (updateCategory.modifiedCount <= 0)
+      throw new createHttpError.InternalServerError(
+        CategoryMessages.UpdatedError,
+      );
+    return true;
+  }
 }
 module.exports = { CategoryService: new CategoryService() };

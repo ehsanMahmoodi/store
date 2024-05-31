@@ -2,7 +2,10 @@ const autoBind = require("auto-bind");
 const { CategoryService } = require("./category.service");
 const HttpCodes = require("http-status-codes");
 const { CategoryMessages } = require("./category.messages");
-const { createCategoryValidation } = require("./category.validations");
+const {
+  createCategoryValidation,
+  updateCategoryValidation,
+} = require("./category.validations");
 class CategoryController {
   #service;
   constructor() {
@@ -60,6 +63,30 @@ class CategoryController {
         statusCode: res.statusCode,
         data: {
           categories,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async update(req, res, next) {
+    try {
+      const {
+        params: { id },
+        body: { fa_name, en_name, slug, icon, parent },
+      } = req;
+      await updateCategoryValidation.validateAsync({
+        id,
+        fa_name,
+        en_name,
+        slug,
+        parent,
+      });
+      await this.#service.update(id, { fa_name, en_name, slug, icon, parent });
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: CategoryMessages.Updated,
         },
       });
     } catch (error) {

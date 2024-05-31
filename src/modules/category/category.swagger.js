@@ -24,6 +24,24 @@
  *      parent:
  *       type: string
  *       description: category parent id.
+ *    updateCategorySchema:
+ *     type: object
+ *     properties:
+ *      fa_name:
+ *       type: string
+ *       description: persian category name.
+ *      en_name:
+ *       type: string
+ *       description: english category name.
+ *      slug:
+ *       type: string
+ *       description: category slug.
+ *      icon:
+ *       type: string
+ *       description: category icon.
+ *      parent:
+ *       type: string
+ *       description: category parent id.
  */
 /**
  * @swagger
@@ -67,6 +85,30 @@
  *              name: id
  *              type: string
  *              required: true
+ *    responses:
+ *     200:
+ *      description: success
+ */
+/**
+ * @swagger
+ *  /category/{id}:
+ *   patch:
+ *    summary: update category.
+ *    tags:
+ *      -  Category
+ *    parameters:
+ *        -   in: path
+ *            name: id
+ *            type: string
+ *            required: true
+ *    requestBody:
+ *     content:
+ *      application/x-www-form-urlencoded:
+ *       schema:
+ *        $ref: "./#/components/schemas/updateCategorySchema"
+ *      application/json:
+ *       schema:
+ *        $ref: "./#/components/schemas/updateCategorySchema"
  *    responses:
  *     200:
  *      description: success
