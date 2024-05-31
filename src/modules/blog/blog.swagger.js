@@ -26,6 +26,25 @@
  *      body:
  *       type: string
  *       description: blog content
+ *    updateBlogSchema:
+ *     type: object
+ *     properties:
+ *      category_id:
+ *       type: string
+ *       description: category id reference
+ *      image:
+ *       type: file
+ *       format: binary
+ *       description: blog image
+ *      title:
+ *       type: string
+ *       description: blog title
+ *      description:
+ *       type: string
+ *       description: blog description
+ *      body:
+ *       type: string
+ *       description: blog content
  */
 
 /**
@@ -57,6 +76,28 @@
  *              type: string
  *              required: false
  *              description: find blog
+ *    responses:
+ *     200:
+ *      description: success
+ */
+/**
+ * @swagger
+ *  /blog/update/{id}:
+ *   patch:
+ *    summary: update blog.
+ *    tags:
+ *      -  Blog
+ *    parameters:
+ *         -    in: path
+ *              name: id
+ *              type: string
+ *              required: true
+ *              description: blog id to update
+ *    requestBody:
+ *     content:
+ *      multipart/form-data:
+ *       schema:
+ *        $ref: "./#/components/schemas/updateBlogSchema"
  *    responses:
  *     200:
  *      description: success

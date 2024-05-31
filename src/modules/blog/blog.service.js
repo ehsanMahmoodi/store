@@ -3,6 +3,7 @@ const { BlogModel } = require("./blog.model");
 const createHttpError = require("http-errors");
 const { BlogMessages } = require("./blog.messages");
 const { CategoryService } = require("../category/category.service");
+const { checkValidObjectId } = require("../../common/utils/functions");
 
 class BlogService {
   #model;
@@ -79,6 +80,31 @@ class BlogService {
         },
       },
     ]);
+  }
+  async findBlogById(id) {
+    checkValidObjectId(id);
+    const blog = await this.#model.findById(id);
+    if (!blog) throw new createHttpError.NotFound(BlogMessages.NotFound);
+    return blog;
+  }
+  async update(id, blogDto) {
+    // check exist blog
+    await this.findBlogById(id);
+    // check exist category_id
+    if (blogDto.category_id) {
+      await this.#categoryService.findCategoryById(blogDto?.category_id);
+    }
+    if (blogDto?.title) {
+      // check exist title
+      await this.alreadyExistBlogByTitle(blogDto?.title);
+    }
+    const updatedBlog = await this.#model.updateOne(
+      { _id: id },
+      { $set: blogDto },
+    );
+    if (updatedBlog.modifiedCount <= 0)
+      throw new createHttpError.InternalServerError(BlogMessages.UpdatedError);
+    return true;
   }
 }
 module.exports = { BlogService: new BlogService() };

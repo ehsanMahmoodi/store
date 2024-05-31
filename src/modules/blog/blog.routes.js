@@ -11,6 +11,11 @@ router.post(
   BlogController.create,
 );
 router.get("/get", BlogController.get);
+router.patch(
+  "/update/:id",
+  uploadFile("blog", "image").single("image"),
+  BlogController.update,
+);
 module.exports = {
   BlogRouter: router,
 };
