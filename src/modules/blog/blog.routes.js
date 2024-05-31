@@ -13,9 +13,11 @@ router.post(
 router.get("/get", BlogController.get);
 router.patch(
   "/update/:id",
+  Authorization,
   uploadFile("blog", "image").single("image"),
   BlogController.update,
 );
+router.delete("/remove/:id", Authorization, BlogController.remove);
 module.exports = {
   BlogRouter: router,
 };

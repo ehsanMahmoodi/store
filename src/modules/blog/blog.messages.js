@@ -5,5 +5,7 @@ const BlogMessages = Object.freeze({
   NotFound: "مقاله یافت نشد.",
   Updated: "مقاله با موفقیت بروزرسانی شد.",
   UpdatedError: "مشکلی در بروزرسانی مقاله به وجود آمده.",
+  Removed: "مقاله با موفقیت حذف شد.",
+  RemovedError: "مشکلی در حذف مقاله به وجود آمده.",
 });
 module.exports = { BlogMessages };

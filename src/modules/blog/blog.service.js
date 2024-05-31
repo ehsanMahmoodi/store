@@ -106,5 +106,12 @@ class BlogService {
       throw new createHttpError.InternalServerError(BlogMessages.UpdatedError);
     return true;
   }
+  async remove(id) {
+    await this.findBlogById(id);
+    const removedBlog = await this.#model.deleteOne({ _id: id });
+    if (removedBlog.deletedCount <= 0)
+      throw new createHttpError.InternalServerError(BlogMessages.RemovedError);
+    return true;
+  }
 }
 module.exports = { BlogService: new BlogService() };

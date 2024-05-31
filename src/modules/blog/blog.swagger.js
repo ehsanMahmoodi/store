@@ -102,3 +102,19 @@
  *     200:
  *      description: success
  */
+/**
+ * @swagger
+ *  /blog/remove/{id}:
+ *   delete:
+ *    summary: delete blog.
+ *    tags:
+ *      -  Blog
+ *    parameters:
+ *         -    in: path
+ *              name: id
+ *              type: string
+ *              required: true
+ *    responses:
+ *     200:
+ *      description: success
+ */

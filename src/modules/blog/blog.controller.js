@@ -95,5 +95,22 @@ class BlogController {
       next(error);
     }
   }
+  async remove(req, res, next) {
+    try {
+      const {
+        params: { id },
+      } = req;
+
+      await this.#service.remove(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: BlogMessages.Removed,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = { BlogController: new BlogController() };
