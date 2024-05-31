@@ -99,5 +99,14 @@ class CategoryService {
       );
     return true;
   }
+  async remove(id) {
+    await this.findCategoryById(id);
+    const removed = await this.#model.deleteOne({ _id: id });
+    if (removed.deletedCount <= 0)
+      throw new createHttpError.InternalServerError(
+        CategoryMessages.RemovedError,
+      );
+    return true;
+  }
 }
 module.exports = { CategoryService: new CategoryService() };

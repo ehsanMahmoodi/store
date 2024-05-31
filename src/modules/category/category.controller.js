@@ -93,5 +93,21 @@ class CategoryController {
       next(error);
     }
   }
+  async remove(req, res, next) {
+    try {
+      const {
+        params: { id },
+      } = req;
+      await this.#service.remove(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: CategoryMessages.Removed,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = { CategoryController: new CategoryController() };

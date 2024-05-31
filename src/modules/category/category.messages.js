@@ -6,5 +6,7 @@ const CategoryMessages = Object.freeze({
   NotFound: "دسته‌بندی یافت نشد.",
   Updated: "دسته‌بندی بروزرسانی شد.",
   UpdatedError: "دسته‌بندی بروزرسانی نشد.",
+  Removed: "دسته‌بندی حذف شد.",
+  RemovedError: "دسته‌بندی حذف نشد.",
 });
 module.exports = { CategoryMessages };

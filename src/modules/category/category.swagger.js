@@ -91,7 +91,7 @@
  */
 /**
  * @swagger
- *  /category/{id}:
+ *  /category/update/{id}:
  *   patch:
  *    summary: update category.
  *    tags:
@@ -109,6 +109,22 @@
  *      application/json:
  *       schema:
  *        $ref: "./#/components/schemas/updateCategorySchema"
+ *    responses:
+ *     200:
+ *      description: success
+ */
+/**
+ * @swagger
+ *  /category/remove/{id}:
+ *   delete:
+ *    summary: remove category by id.
+ *    tags:
+ *      -  Category
+ *    parameters:
+ *         -    in: path
+ *              name: id
+ *              type: string
+ *              required: true
  *    responses:
  *     200:
  *      description: success
