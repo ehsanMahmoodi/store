@@ -44,3 +44,20 @@
  *     200:
  *      description: success
  */
+/**
+ * @swagger
+ *  /blog/get:
+ *   get:
+ *    summary: get blogs.
+ *    tags:
+ *      -  Blog
+ *    parameters:
+ *         -    in: query
+ *              name: search
+ *              type: string
+ *              required: false
+ *              description: find blog
+ *    responses:
+ *     200:
+ *      description: success
+ */

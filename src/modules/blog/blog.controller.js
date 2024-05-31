@@ -43,5 +43,21 @@ class BlogController {
       next(error);
     }
   }
+  async get(req, res, next) {
+    try {
+      const {
+        query: { search },
+      } = req;
+      const blogs = await this.#service.get(search);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          blogs,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = { BlogController: new BlogController() };

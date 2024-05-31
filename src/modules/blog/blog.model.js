@@ -16,5 +16,10 @@ const blogSchema = new Schema(
     timestamps: true,
   },
 );
+blogSchema.index({
+  title: "text",
+  description: "text",
+  body: "text",
+});
 const BlogModel = model("blog", blogSchema);
 module.exports = { BlogModel };

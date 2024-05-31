@@ -10,6 +10,7 @@ router.post(
   uploadFile("blog", "image").single("image"),
   BlogController.create,
 );
+router.get("/get", BlogController.get);
 module.exports = {
   BlogRouter: router,
 };
