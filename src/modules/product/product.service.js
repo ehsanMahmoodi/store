@@ -153,7 +153,8 @@ class ProductService {
         },
       },
     ]);
-    if (!product) throw new createHttpError.NotFound(ProductMessages.NotFound);
+    if (!product || product.length <= 0)
+      throw new createHttpError.NotFound(ProductMessages.NotFound);
     return product;
   }
   getProductProjection() {
