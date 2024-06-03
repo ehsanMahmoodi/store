@@ -10,6 +10,7 @@ router.post(
   uploadFile("products", "image").array("images", 10),
   ProductController.create,
 );
+router.get("/get", ProductController.get);
 module.exports = {
   ProductRouter: router,
 };

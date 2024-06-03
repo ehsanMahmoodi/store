@@ -78,3 +78,20 @@
  *     200:
  *      description: success
  */
+/**
+ * @swagger
+ *  /product/get:
+ *   get:
+ *    summary: get products.
+ *    tags:
+ *      -  Product
+ *    parameters:
+ *        -   name: id
+ *            in: query
+ *            type: string
+ *            required: false
+ *            description: product id
+ *    responses:
+ *     200:
+ *      description: success
+ */

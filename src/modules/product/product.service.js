@@ -7,7 +7,9 @@ const { CategoryService } = require("../category/category.service");
 const {
   convertStringToArray,
   AppendSharpToArrayIndexes,
+  checkValidObjectId,
 } = require("../../common/utils/functions");
+const { Types } = require("mongoose");
 
 class ProductService {
   #model;
@@ -44,6 +46,144 @@ class ProductService {
         ProductMessages.CreatedError,
       );
     return true;
+  }
+  async get(id) {
+    if (id && id.trim().length > 0) {
+      return await this.findById(id);
+    }
+    return await this.#model.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $unwind: "$author",
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_id",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "seller_id",
+          foreignField: "_id",
+          as: "seller",
+        },
+      },
+      {
+        $unwind: "$seller",
+      },
+      {
+        $project: this.getProductProjection(),
+      },
+      {
+        $addFields: {
+          "author.full_name": {
+            $concat: ["$author.first_name", " ", "$author.last_name"],
+          },
+          "seller.full_name": {
+            $concat: ["$seller.first_name", " ", "$seller.last_name"],
+          },
+        },
+      },
+    ]);
+  }
+  async findById(id) {
+    checkValidObjectId(id);
+    const product = await this.#model.aggregate([
+      {
+        $match: { _id: new Types.ObjectId(id) },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $unwind: "$author",
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_id",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "seller_id",
+          foreignField: "_id",
+          as: "seller",
+        },
+      },
+      {
+        $unwind: "$seller",
+      },
+      {
+        $project: this.getProductProjection(),
+      },
+      {
+        $addFields: {
+          "author.full_name": {
+            $concat: ["$author.first_name", " ", "$author.last_name"],
+          },
+          "seller.full_name": {
+            $concat: ["$seller.first_name", " ", "$seller.last_name"],
+          },
+        },
+      },
+    ]);
+    if (!product) throw new createHttpError.NotFound(ProductMessages.NotFound);
+    return product;
+  }
+  getProductProjection() {
+    return {
+      "author.otp": 0,
+      "author.phone": 0,
+      "author.verified_phone": 0,
+      "author.brith_date": 0,
+      "author.discount": 0,
+      "author.wallet_balance": 0,
+      "author.__v": 0,
+      "author.role": 0,
+      "author.email": 0,
+      "seller.otp": 0,
+      "seller.phone": 0,
+      "seller.verified_phone": 0,
+      "seller.brith_date": 0,
+      "seller.discount": 0,
+      "seller.wallet_balance": 0,
+      "seller.__v": 0,
+      "seller.role": 0,
+      "seller.email": 0,
+      "category.icon": 0,
+      "category.parent": 0,
+      "category.parents": 0,
+      "category.depth": 0,
+      category_id: 0,
+      seller_id: 0,
+      __v: 0,
+    };
   }
 }
 module.exports = { ProductService: new ProductService() };

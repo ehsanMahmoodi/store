@@ -66,5 +66,21 @@ class ProductController {
       next(error);
     }
   }
+  async get(req, res, next) {
+    try {
+      const {
+        query: { id },
+      } = req;
+      const products = await this.#service.get(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          products,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = { ProductController: new ProductController() };
