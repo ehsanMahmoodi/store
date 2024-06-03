@@ -40,7 +40,7 @@ class BlogController {
       res.status(HttpCodes.CREATED).send({
         statusCode: res.statusCode,
         data: {
-          message: CategoryMessages.Created,
+          message: BlogMessages.Created,
         },
       });
     } catch (error) {
