@@ -17,7 +17,7 @@ const productSchema = new Schema({
   seller_id: { type: Types.ObjectId, required: true, ref: "user" },
   tags: { type: [String], default: [] },
   type: { type: String, required: true, enum: ["physical", "virtual"] },
-  options: { type: Object, default: {} },
+  options: { type: [Types.ObjectId], default: [], ref: "option" },
 });
 const ProductModel = model("product", productSchema);
 module.exports = { ProductModel };
