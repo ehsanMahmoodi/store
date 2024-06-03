@@ -215,7 +215,16 @@ class ProductService {
     );
     if (updateProduct.modifiedCount <= 0)
       throw new createHttpError.InternalServerError(
-        ProductMessages.CreatedError,
+        ProductMessages.UpdatedError,
+      );
+    return true;
+  }
+  async remove(id) {
+    await this.findById(id);
+    const removeProduct = await this.#model.deleteOne({ _id: id });
+    if (removeProduct.deletedCount <= 0)
+      throw new createHttpError.InternalServerError(
+        ProductMessages.RemovedError,
       );
     return true;
   }

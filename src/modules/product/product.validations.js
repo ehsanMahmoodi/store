@@ -41,6 +41,7 @@ const createProductValidation = Joi.object({
     }),
   type: Joi.string().required().valid("physical", "virtual").messages({
     "string.valid": "نوع محصول باید یکی از موارد (physical,virtual) باشد.",
+    "any.required": "نوع محصول الزامیست.",
   }),
 });
 const updateProductValidation = Joi.object({
@@ -75,7 +76,7 @@ const updateProductValidation = Joi.object({
       "string.valid":
         "وضعیت محصول باید یکی از موارد (available,out of stock,pre-order) باشد.",
     }),
-  type: Joi.string().required().valid("physical", "virtual").messages({
+  type: Joi.string().valid("physical", "virtual").messages({
     "string.valid": "نوع محصول باید یکی از موارد (physical,virtual) باشد.",
   }),
 });

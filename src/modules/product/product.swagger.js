@@ -166,3 +166,18 @@
  *     200:
  *      description: success
  */
+/**
+ * @swagger
+ *  /product/remove/{id}:
+ *   delete:
+ *    summary: remove product.
+ *    tags:
+ *      -  Product
+ *    parameters:
+ *       -   in: path
+ *           name: id
+ *           type: string
+ *    responses:
+ *     200:
+ *      description: success
+ */

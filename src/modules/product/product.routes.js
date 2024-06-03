@@ -16,6 +16,7 @@ router.patch(
   uploadFile("products", "image").array("images", 10),
   ProductController.update,
 );
+router.delete("/remove/:id", ProductController.remove);
 module.exports = {
   ProductRouter: router,
 };
