@@ -16,7 +16,7 @@ const generateRandomNumber = (length = 3) => {
 function ListOfImagesFromRequest(files, fileUploadPath) {
   if (files?.length > 0) {
     return files
-      .map((file) => path.join(fileUploadPath, file.fileName))
+      .map((file) => path.join(fileUploadPath, file.filename))
       .map((item) => item.replace(/\\/g, "/"));
   } else {
     return [];
@@ -37,10 +37,30 @@ const checkValidObjectId = (id) => {
 const getImageFromRequest = (fileName, fileUploadPath) => {
   return path.join(fileUploadPath, fileName).replace(/\\/g, "/");
 };
+const convertStringToArray = (string = "") => {
+  if (string.trim().length > 0) {
+    return string.split(",");
+  }
+  return [];
+};
+const AppendSharpToArrayIndexes = (array = []) => {
+  if (array.length > 0) {
+    return array.map((item) => {
+      if (!item.startsWith("#")) {
+        return "#" + item;
+      } else {
+        return item;
+      }
+    });
+  }
+  return [];
+};
 module.exports = {
   generateRandomNumber,
   ListOfImagesFromRequest,
   generateSlug,
   checkValidObjectId,
   getImageFromRequest,
+  convertStringToArray,
+  AppendSharpToArrayIndexes,
 };

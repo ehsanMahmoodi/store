@@ -22,6 +22,10 @@ function swaggerConfig(app) {
       ],
       tags: [
         {
+          name: "Product",
+          description: "Product Module's and Route's",
+        },
+        {
           name: "Blog",
           description: "Blog Module's and Route's",
         },
