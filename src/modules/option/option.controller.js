@@ -2,7 +2,10 @@ const autoBind = require("auto-bind");
 const { OptionService } = require("./option.service");
 const HttpCodes = require("http-status-codes");
 const { OptionMessages } = require("./option.messages");
-const { createOptionValidation } = require("./option.validations");
+const {
+  createOptionValidation,
+  updateOptionValidation,
+} = require("./option.validations");
 class OptionController {
   #service;
   constructor() {
@@ -60,6 +63,63 @@ class OptionController {
         options,
       },
     });
+  }
+  async update(req, res, next) {
+    try {
+      const {
+        params: { id },
+        body: {
+          name,
+          description,
+          key,
+          field_type,
+          is_required,
+          product_id,
+          enums,
+        },
+      } = req;
+      await updateOptionValidation.validateAsync({
+        name,
+        description,
+        key,
+        field_type,
+        is_required,
+        product_id,
+      });
+      await this.#service.update(id, {
+        name,
+        description,
+        key,
+        field_type,
+        is_required,
+        product_id,
+        enums,
+      });
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: OptionMessages.Updated,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async remove(req, res, next) {
+    try {
+      const {
+        params: { id },
+      } = req;
+      await this.#service.remove(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: OptionMessages.Removed,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 module.exports = { OptionController: new OptionController() };

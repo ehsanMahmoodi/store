@@ -9,14 +9,17 @@ const {
 const { ProductModel } = require("../product/product.model");
 const { Types } = require("mongoose");
 const { ProductMessages } = require("../product/product.messages");
+const { ProductService } = require("../product/product.service");
 
 class OptionService {
   #model;
   #productModel;
+  #productService;
   constructor() {
     autoBind(this);
     this.#model = OptionModel;
     this.#productModel = ProductModel;
+    this.#productService = ProductService;
   }
   async create(optionDto) {
     // check exist product
@@ -90,7 +93,7 @@ class OptionService {
       },
     ]);
     if (!option || option.length <= 0)
-      throw new createHttpError.NotFound(ProductMessages.NotFound);
+      throw new createHttpError.NotFound(OptionMessages.NotFound);
     return option;
   }
   getOptionProjection() {
@@ -109,6 +112,42 @@ class OptionService {
       "product.__v": 0,
       "product.options": 0,
     };
+  }
+  async update(id, optionDto) {
+    // check exist option
+    const option = await this.findById(id);
+    // check exist product
+    if (optionDto.product_id) {
+      await this.#productService.findById(optionDto.product_id);
+    }
+    // check exist option key and name
+    if (optionDto.name || optionDto.key) {
+      await this.alreadyExistOption(optionDto.name, optionDto.key);
+    }
+    if (optionDto?.enums) {
+      if (typeof optionDto.enums === "string")
+        optionDto.enums = convertStringToArray(optionDto.enums);
+    }
+    const updateOption = await this.#model.updateOne(
+      { _id: id },
+      {
+        $set: optionDto,
+      },
+    );
+    if (optionDto.modifiedCount <= 0)
+      throw new createHttpError.InternalServerError(
+        OptionMessages.UpdatedError,
+      );
+    return true;
+  }
+  async remove(id) {
+    await this.findById(id);
+    const removeOption = await this.#model.deleteOne({ _id: id });
+    if (removeOption.deletedCount <= 0)
+      throw new createHttpError.InternalServerError(
+        OptionMessages.RemovedError,
+      );
+    return true;
   }
 }
 module.exports = { OptionService: new OptionService() };
