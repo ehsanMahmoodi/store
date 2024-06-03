@@ -185,5 +185,38 @@ class ProductService {
       __v: 0,
     };
   }
+  async update(id, productDto) {
+    // check exist product
+    const product = await this.findById(id);
+    // stock handler in virtual products
+    if (productDto?.type.toLowerCase() === "virtual")
+      productDto.stock = undefined;
+    // stock and status handler
+    if (productDto?.stock <= 0) {
+      productDto.stock = 0;
+      productDto.status = "out of stock";
+    }
+    // check exist category_id
+    if (productDto?.category_id)
+      await this.#categoryService.findCategoryById(productDto.category_id);
+    // check exist seller_id
+    if (productDto?.seller_id)
+      await this.#userService.findUserById(productDto.seller_id);
+    if (productDto?.tags) {
+      if (typeof productDto?.tags === "string") {
+        productDto.tags = convertStringToArray(productDto.tags);
+      }
+      productDto.tags = AppendSharpToArrayIndexes(productDto.tags);
+    }
+    const updateProduct = await this.#model.updateOne(
+      { _id: id },
+      { $set: productDto },
+    );
+    if (updateProduct.modifiedCount <= 0)
+      throw new createHttpError.InternalServerError(
+        ProductMessages.CreatedError,
+      );
+    return true;
+  }
 }
 module.exports = { ProductService: new ProductService() };

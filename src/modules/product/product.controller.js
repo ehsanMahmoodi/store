@@ -2,7 +2,10 @@ const autoBind = require("auto-bind");
 const { ProductService } = require("./product.service");
 const { ProductMessages } = require("./product.messages");
 const HttpCodes = require("http-status-codes");
-const { createProductValidation } = require("./product.validations");
+const {
+  createProductValidation,
+  updateProductValidation,
+} = require("./product.validations");
 const { ListOfImagesFromRequest } = require("../../common/utils/functions");
 class ProductController {
   #service;
@@ -76,6 +79,62 @@ class ProductController {
         statusCode: res.statusCode,
         data: {
           products,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async update(req, res, next) {
+    try {
+      const {
+        params: { id },
+        body: {
+          name,
+          description,
+          price,
+          discount_code,
+          discount_percentage,
+          stock,
+          category_id,
+          status,
+          seller_id,
+          tags,
+          type,
+        },
+      } = req;
+      await updateProductValidation.validateAsync({
+        name,
+        description,
+        price,
+        discount_percentage,
+        stock,
+        category_id,
+        status,
+        seller_id,
+        type,
+      });
+      let images;
+      if (req.fileUploadPath && req.files)
+        images = ListOfImagesFromRequest(req.files, req.fileUploadPath);
+      await this.#service.update(id, {
+        name,
+        description,
+        price,
+        discount_code,
+        discount_percentage,
+        stock,
+        category_id,
+        status,
+        seller_id,
+        tags,
+        images,
+        type,
+      });
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: ProductMessages.Updated,
         },
       });
     } catch (error) {

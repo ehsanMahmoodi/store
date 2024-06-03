@@ -11,6 +11,11 @@ router.post(
   ProductController.create,
 );
 router.get("/get", ProductController.get);
+router.patch(
+  "/update/:id",
+  uploadFile("products", "image").array("images", 10),
+  ProductController.update,
+);
 module.exports = {
   ProductRouter: router,
 };
