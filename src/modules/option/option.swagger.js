@@ -57,3 +57,20 @@
  *     200:
  *      description: success
  */
+/**
+ * @swagger
+ *  /option/get:
+ *   get:
+ *    summary: get options.
+ *    tags:
+ *      -  Option
+ *    parameters:
+ *        -   name: id
+ *            in: query
+ *            type: string
+ *            required: false
+ *            description: option id
+ *    responses:
+ *     200:
+ *      description: success
+ */

@@ -49,5 +49,17 @@ class OptionController {
       next(error);
     }
   }
+  async get(req, res, next) {
+    const {
+      query: { id },
+    } = req;
+    const options = await this.#service.get(id);
+    res.status(HttpCodes.OK).send({
+      statusCode: res.statusCode,
+      data: {
+        options,
+      },
+    });
+  }
 }
 module.exports = { OptionController: new OptionController() };
