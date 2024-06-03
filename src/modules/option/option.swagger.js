@@ -123,6 +123,7 @@
  *           name: id
  *           type: string
  *           required: true
+ *           description: option id
  *    responses:
  *     200:
  *      description: success

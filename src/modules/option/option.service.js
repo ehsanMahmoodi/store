@@ -23,9 +23,16 @@ class OptionService {
   }
   async create(optionDto) {
     // check exist product
-    const product = await this.#productModel.findById(optionDto.product_id);
-    // check already exist option name and key
-    await this.alreadyExistOption(optionDto.name, optionDto.key);
+    let product = await this.#productService.findById(optionDto.product_id);
+    product = product[0];
+    // Checking if the option name is duplicated in each product
+    if (product?.options) {
+      for (const option of product.options) {
+        if (optionDto.name === option.name || optionDto.key === option.key) {
+          throw new createHttpError.Conflict(OptionMessages.Conflict);
+        }
+      }
+    }
     if (optionDto?.enums) {
       if (typeof optionDto.enums === "string")
         optionDto.enums = convertStringToArray(optionDto.enums);
@@ -92,7 +99,7 @@ class OptionService {
         $project: this.getOptionProjection(),
       },
     ]);
-    if (!option || option.length <= 0)
+    if (!option || option?.length <= 0)
       throw new createHttpError.NotFound(OptionMessages.NotFound);
     return option;
   }
@@ -115,14 +122,25 @@ class OptionService {
   }
   async update(id, optionDto) {
     // check exist option
-    const option = await this.findById(id);
+    let option = await this.findById(id);
+    option = option[0];
     // check exist product
+    let product;
     if (optionDto.product_id) {
-      await this.#productService.findById(optionDto.product_id);
+      product = await this.#productService.findById(optionDto.product_id);
+      product = product[0];
+    } else {
+      let productId = option.product._id;
+      product = await this.#productService.findById(productId);
+      product = product[0];
     }
-    // check exist option key and name
-    if (optionDto.name || optionDto.key) {
-      await this.alreadyExistOption(optionDto.name, optionDto.key);
+    // Checking if the option name is duplicated in each product
+    if (optionDto.name || (optionDto.key && product?.options)) {
+      for (const option of product.options) {
+        if (optionDto.name === option.name || optionDto.key === option.key) {
+          throw new createHttpError.Conflict(OptionMessages.Conflict);
+        }
+      }
     }
     if (optionDto?.enums) {
       if (typeof optionDto.enums === "string")

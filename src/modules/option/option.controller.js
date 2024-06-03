@@ -53,16 +53,20 @@ class OptionController {
     }
   }
   async get(req, res, next) {
-    const {
-      query: { id },
-    } = req;
-    const options = await this.#service.get(id);
-    res.status(HttpCodes.OK).send({
-      statusCode: res.statusCode,
-      data: {
-        options,
-      },
-    });
+    try {
+      const {
+        query: { id },
+      } = req;
+      const options = await this.#service.get(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          options,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
   }
   async update(req, res, next) {
     try {
