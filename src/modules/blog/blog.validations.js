@@ -11,15 +11,15 @@ const createBlogValidation = Joi.object({
       "any.required": "آیدی دسته‌بندی الزامی می باشد.",
     }),
   title: Joi.string().trim().required().min(3).messages({
-    "string.min": "عنوان مقاله باید حداقل 3 کارامتر باشد.",
+    "string.min": "عنوان مقاله باید حداقل 3 کاراکتر باشد.",
     "any.required": "عنوان مقاله الزامیست",
   }),
   description: Joi.string().trim().required().min(5).messages({
-    "string.min": "توضیحات مقاله باید حداقل 5 کارامتر باشد.",
+    "string.min": "توضیحات مقاله باید حداقل 5 کاراکتر باشد.",
     "any.required": "توضیحات مقاله الزامیست",
   }),
   body: Joi.string().trim().required().min(11).messages({
-    "string.min": "متن مقاله باید حداقل 11 کارامتر باشد.",
+    "string.min": "متن مقاله باید حداقل 11 کاراکتر باشد.",
     "any.required": "متن مقاله الزامیست",
   }),
 });
@@ -29,13 +29,13 @@ const updateBlogValidation = Joi.object({
     "string.pattern.base": "آیدی دسته‌بندی وارد شده صحیح نمی باشد.",
   }),
   title: Joi.string().trim().min(3).messages({
-    "string.min": "عنوان مقاله باید حداقل 3 کارامتر باشد.",
+    "string.min": "عنوان مقاله باید حداقل 3 کاراکتر باشد.",
   }),
   description: Joi.string().trim().min(5).messages({
-    "string.min": "توضیحات مقاله باید حداقل 5 کارامتر باشد.",
+    "string.min": "توضیحات مقاله باید حداقل 5 کاراکتر باشد.",
   }),
   body: Joi.string().trim().min(11).messages({
-    "string.min": "متن مقاله باید حداقل 11 کارامتر باشد.",
+    "string.min": "متن مقاله باید حداقل 11 کاراکتر باشد.",
   }),
 });
 module.exports = { createBlogValidation, updateBlogValidation };
