@@ -86,6 +86,14 @@ class ProductService {
         $unwind: "$seller",
       },
       {
+        $lookup: {
+          from: "options",
+          localField: "options",
+          foreignField: "_id",
+          as: "options",
+        },
+      },
+      {
         $project: this.getProductProjection(),
       },
       {
@@ -140,6 +148,14 @@ class ProductService {
         $unwind: "$seller",
       },
       {
+        $lookup: {
+          from: "options",
+          localField: "options",
+          foreignField: "_id",
+          as: "options",
+        },
+      },
+      {
         $project: this.getProductProjection(),
       },
       {
@@ -181,6 +197,7 @@ class ProductService {
       "category.parent": 0,
       "category.parents": 0,
       "category.depth": 0,
+      "options.product_id": 0,
       category_id: 0,
       seller_id: 0,
       __v: 0,
