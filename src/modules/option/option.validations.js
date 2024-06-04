@@ -21,7 +21,7 @@ const createOptionValidation = Joi.object({
     .required()
     .valid("number", "string", "boolean", "array")
     .messages({
-      "string.valid":
+      "any.only":
         "field_type آپشن باید یکی از موارد (array,boolean,string,number) باشد.",
       "any.required": "نوع آپشن الزامیست.",
     }),
@@ -46,7 +46,7 @@ const updateOptionValidation = Joi.object({
   field_type: Joi.string()
     .valid("number", "string", "boolean", "array")
     .messages({
-      "string.valid":
+      "any.only":
         "field_type آپشن باید یکی از موارد (array,boolean,string,number) باشد.",
     }),
   is_required: Joi.boolean().messages({

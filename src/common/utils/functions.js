@@ -55,6 +55,17 @@ const AppendSharpToArrayIndexes = (array = []) => {
   }
   return [];
 };
+const checkExistArrayOfIdInModel = async (array = [], modelName) => {
+  for (let id of array) {
+    let findId = await modelName.findById(id);
+    if (!findId)
+      throw new createHttpError.NotFound(id + " آیدی کاربر یافت نشد.");
+  }
+};
+const removeDuplicatesArrayValues = (array = []) => {
+  if (array && array.length > 0) return [...new Set(array)];
+  return [];
+};
 module.exports = {
   generateRandomNumber,
   ListOfImagesFromRequest,
@@ -63,4 +74,6 @@ module.exports = {
   getImageFromRequest,
   convertStringToArray,
   AppendSharpToArrayIndexes,
+  checkExistArrayOfIdInModel,
+  removeDuplicatesArrayValues,
 };

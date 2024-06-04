@@ -36,11 +36,11 @@ const createProductValidation = Joi.object({
   status: Joi.string()
     .valid("available", "out of stock", "pre-order")
     .messages({
-      "string.valid":
+      "any.only":
         "وضعیت محصول باید یکی از موارد (available,out of stock,pre-order) باشد.",
     }),
   type: Joi.string().required().valid("physical", "virtual").messages({
-    "string.valid": "نوع محصول باید یکی از موارد (physical,virtual) باشد.",
+    "any.only": "نوع محصول باید یکی از موارد (physical,virtual) باشد.",
     "any.required": "نوع محصول الزامیست.",
   }),
 });
@@ -73,11 +73,11 @@ const updateProductValidation = Joi.object({
   status: Joi.string()
     .valid("available", "out of stock", "pre-order")
     .messages({
-      "string.valid":
+      "any.only":
         "وضعیت محصول باید یکی از موارد (available,out of stock,pre-order) باشد.",
     }),
   type: Joi.string().valid("physical", "virtual").messages({
-    "string.valid": "نوع محصول باید یکی از موارد (physical,virtual) باشد.",
+    "any.only": "نوع محصول باید یکی از موارد (physical,virtual) باشد.",
   }),
 });
 module.exports = { createProductValidation, updateProductValidation };
