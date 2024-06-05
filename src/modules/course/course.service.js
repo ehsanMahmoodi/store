@@ -45,6 +45,13 @@ class CourseService {
     // check start date and end date
     if (courseDto.startDate === courseDto.endDate)
       throw new createHttpError.Conflict(CourseMessages.DateConflict);
+    if (courseDto.startDate && courseDto.endDate) {
+      checkEndTimeGreaterThanStartTime(courseDto.startDate, courseDto.endDate);
+    }
+    if (courseDto.startDate)
+      checkTimeGreaterThanNowTime(new Date(), courseDto.startDate);
+    if (courseDto.endDate)
+      checkTimeGreaterThanNowTime(new Date(), courseDto.startDate);
     // string to array fields
     if (typeof courseDto.materials === "string")
       courseDto.materials = convertStringToArray(courseDto.materials);
