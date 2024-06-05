@@ -10,6 +10,12 @@ router.post(
   uploadFile("course", "image").array("images", 5),
   CourseController.create,
 );
+router.patch(
+  "/update/:id",
+  Authorization,
+  uploadFile("course", "image").array("images", 5),
+  CourseController.update,
+);
 module.exports = {
   CourseRouter: router,
 };

@@ -3,6 +3,8 @@ const path = require("path");
 const slugify = require("slugify");
 const { isValidObjectId } = require("mongoose");
 const createHttpError = require("http-errors");
+const { isAfter, format } = require("date-fns");
+const { Messages } = require("./messages");
 const generateRandomNumber = (length = 3) => {
   let min, max;
   min = Math.pow(10, length - 1);
@@ -66,6 +68,26 @@ const removeDuplicatesArrayValues = (array = []) => {
   if (array && array.length > 0) return [...new Set(array)];
   return [];
 };
+const removeUndefinedObjectValues = (data = {}) => {
+  for (const key in data) {
+    if (data[key] === undefined) {
+      delete data[key];
+    }
+  }
+  return data;
+};
+const checkEndTimeGreaterThanStartTime = (start, end) => {
+  let result = isAfter(new Date(end), new Date(start));
+  if (!result)
+    throw new createHttpError.BadRequest(Messages.EndTimeGreaterThanStart);
+  return true;
+};
+const checkTimeGreaterThanNowTime = (start, end) => {
+  let result = isAfter(new Date(end), new Date(start));
+  if (!result)
+    throw new createHttpError.BadRequest(Messages.TimeGreaterThanNowTime);
+  return true;
+};
 module.exports = {
   generateRandomNumber,
   ListOfImagesFromRequest,
@@ -76,4 +98,7 @@ module.exports = {
   AppendSharpToArrayIndexes,
   checkExistArrayOfIdInModel,
   removeDuplicatesArrayValues,
+  removeUndefinedObjectValues,
+  checkEndTimeGreaterThanStartTime,
+  checkTimeGreaterThanNowTime,
 };
