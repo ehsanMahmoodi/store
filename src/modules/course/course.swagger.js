@@ -208,3 +208,46 @@
  *     200:
  *      description: success
  */
+/**
+ * @swagger
+ *  /course/get:
+ *   get:
+ *    summary: get all courses
+ *    tags:
+ *      -  Course
+ *    responses:
+ *     200:
+ *      description: success
+ */
+/**
+ * @swagger
+ *  /course/get/{id}:
+ *   get:
+ *    summary: get course by id
+ *    tags:
+ *      -  Course
+ *    parameters:
+ *         -   in: path
+ *             name: id
+ *             type: string
+ *             required: true
+ *    responses:
+ *     200:
+ *      description: success
+ */
+/**
+ * @swagger
+ *  /course/remove/{id}:
+ *   delete:
+ *    summary: remove course by id
+ *    tags:
+ *      -  Course
+ *    parameters:
+ *         -   in: path
+ *             name: id
+ *             type: string
+ *             required: true
+ *    responses:
+ *     200:
+ *      description: success
+ */

@@ -11,9 +11,12 @@ const {
   removeUndefinedObjectValues,
   checkEndTimeGreaterThanStartTime,
   checkTimeGreaterThanNowTime,
+  checkValidObjectId,
 } = require("../../common/utils/functions");
 const { UserModel } = require("../user/user.model");
 const { formatISO9075 } = require("date-fns");
+const { Types } = require("mongoose");
+const { OptionMessages } = require("../option/option.messages");
 
 class CourseService {
   #model;
@@ -131,6 +134,7 @@ class CourseService {
     return newListOfPeople;
   }
   async findOneById(id) {
+    checkValidObjectId(id);
     const course = await this.#model.findById(id);
     if (!course) throw new createHttpError.NotFound(CourseMessages.NotFound);
     return course;
@@ -156,6 +160,178 @@ class CourseService {
           );
       }
     }
+  }
+  async getAll() {
+    return await this.#model.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $unwind: "$author",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "teacher",
+          foreignField: "_id",
+          as: "teacher",
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_id",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "students",
+          foreignField: "_id",
+          as: "students",
+        },
+      },
+      {
+        $lookup: {
+          from: "seasons",
+          localField: "seasons",
+          foreignField: "_id",
+          as: "seasons",
+        },
+      },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+      {
+        $project: this.getCourseProjection(),
+      },
+    ]);
+  }
+  async getOneCourse(courseId) {
+    checkValidObjectId(courseId);
+    let course = await this.#model.aggregate([
+      {
+        $match: {
+          _id: new Types.ObjectId(courseId),
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $unwind: "$author",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "teacher",
+          foreignField: "_id",
+          as: "teacher",
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_id",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "students",
+          foreignField: "_id",
+          as: "students",
+        },
+      },
+      {
+        $lookup: {
+          from: "seasons",
+          localField: "seasons",
+          foreignField: "_id",
+          as: "seasons",
+        },
+      },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+      {
+        $project: this.getCourseProjection(),
+      },
+    ]);
+    if (course.length > 0) return course[0];
+    throw new createHttpError.NotFound(CourseMessages.NotFound);
+  }
+  getCourseProjection() {
+    return {
+      "author.otp": 0,
+      "author.phone": 0,
+      "author.verified_phone": 0,
+      "author.brith_date": 0,
+      "author.discount": 0,
+      "author.wallet_balance": 0,
+      "author.__v": 0,
+      "author.role": 0,
+      "author.email": 0,
+      "teacher.otp": 0,
+      "teacher.phone": 0,
+      "teacher.verified_phone": 0,
+      "teacher.brith_date": 0,
+      "teacher.discount": 0,
+      "teacher.wallet_balance": 0,
+      "teacher.__v": 0,
+      "teacher.role": 0,
+      "teacher.email": 0,
+      "students.otp": 0,
+      "students.phone": 0,
+      "students.verified_phone": 0,
+      "students.brith_date": 0,
+      "students.discount": 0,
+      "students.wallet_balance": 0,
+      "students.__v": 0,
+      "students.role": 0,
+      "students.email": 0,
+      "category.icon": 0,
+      "category.parent": 0,
+      "category.parents": 0,
+      "category.depth": 0,
+      category_id: 0,
+      __v: 0,
+    };
+  }
+  async remove(courseId) {
+    // check exist course
+    await this.findOneById(courseId);
+    // remove  course
+    const removeCourse = await this.#model.deleteOne({ _id: courseId });
+    if (removeCourse.deletedCount == 0)
+      throw new createHttpError.InternalServerError(
+        CourseMessages.RemovedError,
+      );
+    return true;
   }
 }
 module.exports = { CourseService: new CourseService() };

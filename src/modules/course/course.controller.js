@@ -161,10 +161,56 @@ class CourseController {
         students: allStudent,
         type,
       });
-      res.status(HttpCodes.CREATED).send({
+      res.status(HttpCodes.OK).send({
         statusCode: res.statusCode,
         data: {
           message: CourseMessages.Updated,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAll(req, res, next) {
+    try {
+      const courses = await this.#service.getAll();
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          courses,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getOneCourse(req, res, next) {
+    try {
+      const {
+        params: { id },
+      } = req;
+      const course = await this.#service.getOneCourse(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          course,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async remove(req, res, next) {
+    try {
+      const {
+        params: { id },
+      } = req;
+
+      await this.#service.remove(id);
+      res.status(HttpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: CourseMessages.Removed,
         },
       });
     } catch (error) {

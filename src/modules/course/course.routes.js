@@ -16,6 +16,9 @@ router.patch(
   uploadFile("course", "image").array("images", 5),
   CourseController.update,
 );
+router.get("/get", CourseController.getAll);
+router.get("/get/:id", Authorization, CourseController.getOneCourse);
+router.delete("/remove/:id", Authorization, CourseController.remove);
 module.exports = {
   CourseRouter: router,
 };
