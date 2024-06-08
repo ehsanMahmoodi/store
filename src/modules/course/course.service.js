@@ -202,14 +202,6 @@ class CourseService {
         },
       },
       {
-        $lookup: {
-          from: "seasons",
-          localField: "seasons",
-          foreignField: "_id",
-          as: "seasons",
-        },
-      },
-      {
         $sort: {
           _id: -1,
         },
@@ -263,14 +255,6 @@ class CourseService {
           localField: "students",
           foreignField: "_id",
           as: "students",
-        },
-      },
-      {
-        $lookup: {
-          from: "seasons",
-          localField: "seasons",
-          foreignField: "_id",
-          as: "seasons",
         },
       },
       {

@@ -22,6 +22,10 @@ function swaggerConfig(app) {
       ],
       tags: [
         {
+          name: "Season",
+          description: "Season Module's and Route's",
+        },
+        {
           name: "Course",
           description: "Course Module's and Route's",
         },

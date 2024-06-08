@@ -1,4 +1,5 @@
 const { Schema, Types, model } = require("mongoose");
+const { seasonSchema } = require("../seasons/seasons.model");
 
 const courseSchema = new Schema(
   {
@@ -24,7 +25,7 @@ const courseSchema = new Schema(
     topics: { type: [String], default: [] }, // موضوعات دوره
     students: { type: [Types.ObjectId], ref: "user", default: [] },
     type: { type: String, enum: ["عادی", "ویژه"], default: "عادی" },
-    seasons: { type: [Types.ObjectId], ref: "season", default: [] }, // فصل های دوره
+    seasons: { type: seasonSchema, default: [] }, // فصل های دوره
   },
   {
     versionKey: false,
