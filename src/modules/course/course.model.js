@@ -25,7 +25,7 @@ const courseSchema = new Schema(
     topics: { type: [String], default: [] }, // موضوعات دوره
     students: { type: [Types.ObjectId], ref: "user", default: [] },
     type: { type: String, enum: ["عادی", "ویژه"], default: "عادی" },
-    seasons: { type: seasonSchema, default: [] }, // فصل های دوره
+    seasons: { type: [seasonSchema], default: [] }, // فصل های دوره
   },
   {
     versionKey: false,

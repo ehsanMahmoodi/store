@@ -116,3 +116,19 @@
  *     200:
  *      description: success
  */
+/**
+ * @swagger
+ *  /season/get-all/{id}:
+ *   get:
+ *    summary: get all seasons of course by courseId
+ *    tags:
+ *      -   Season
+ *    parameters:
+ *        -   in: path
+ *            name: id
+ *            required: true
+ *            type: string
+ *    responses:
+ *     200:
+ *      description: success
+ */

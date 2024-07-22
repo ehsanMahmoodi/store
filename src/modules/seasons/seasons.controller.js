@@ -80,5 +80,17 @@ class SeasonsController {
       next(error);
     }
   }
+  async getAll(req,res,next){
+    try{
+      const {params:{id}}=req
+      const seasons = await this.#service.getAll(id)
+      res.status(HttpCodes.OK).send({
+        statusCode:res.statusCode,
+        data:{seasons:seasons[0].seasons}
+      })
+    }catch(error){
+      next(error)
+    }
+  }
 }
 module.exports = { SeasonsController: new SeasonsController() };

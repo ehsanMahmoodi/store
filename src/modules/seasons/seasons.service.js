@@ -5,7 +5,7 @@ const { CourseService } = require("../course/course.service");
 const createHttpError = require("http-errors");
 const { SeasonsMessages } = require("./seasons.messages");
 const { Types } = require("mongoose");
-const { removeUndefinedObjectValues } = require("../../common/utils/functions");
+const { removeUndefinedObjectValues, checkValidObjectId } = require("../../common/utils/functions");
 
 class SeasonsService {
   #courseService;
@@ -101,6 +101,22 @@ class SeasonsService {
         SeasonsMessages.RemovedError,
       );
     return true;
+  }
+  async getAll(courseId){
+    checkValidObjectId(courseId)
+    return await this.#courseModel.aggregate([
+      {
+        $match:{
+          _id:new Types.ObjectId(courseId)
+        }
+      },
+      {
+        $project:{
+          seasons:1,
+          _id:0
+        }
+      }
+    ])
   }
 }
 module.exports = { SeasonsService: new SeasonsService() };
