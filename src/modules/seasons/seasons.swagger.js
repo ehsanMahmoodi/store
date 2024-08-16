@@ -128,6 +128,7 @@
  *            name: id
  *            required: true
  *            type: string
+ *            description: categoryId
  *    responses:
  *     200:
  *      description: success

@@ -7,6 +7,7 @@ const { ProductRouter } = require("./modules/product/product.routes");
 const { OptionRouter } = require("./modules/option/option.routes");
 const { CourseRouter } = require("./modules/course/course.routes");
 const { SeasonsRouter } = require("./modules/seasons/seasons.routes");
+const { EpisodeRoutes } = require("./modules/episodes/episodes.routes");
 
 const router = Router();
 router.use("/auth", AuthRouter);
@@ -17,6 +18,7 @@ router.use("/product", ProductRouter);
 router.use("/option", OptionRouter);
 router.use("/course", CourseRouter);
 router.use("/season", SeasonsRouter);
+router.use("/episode", EpisodeRoutes);
 module.exports = {
   MainRouter: router,
 };
