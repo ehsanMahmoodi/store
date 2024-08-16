@@ -1,10 +1,10 @@
 const autoBind = require("auto-bind");
 const { CourseModel } = require("../course/course.model");
 const createHttpError = require("http-errors");
-const { EpisodeMessages } = require("./episode.messages");
 const { Types } = require("mongoose");
 const { removeUndefinedObjectValues } = require("../../common/utils/functions");
 const { CourseMessages } = require("../course/course.messages");
+const { EpisodeMessages } = require("./episode.messages");
 
 class EpisodesService {
   #model;
@@ -14,10 +14,7 @@ class EpisodesService {
   }
   async create(episodeDto) {
     episodeDto = removeUndefinedObjectValues(episodeDto);
-    const course = await this.findCourseAndSeason(
-      episodeDto.course_id,
-      episodeDto.season_id,
-    );
+    await this.findCourseAndSeason(episodeDto.course_id, episodeDto.season_id);
     await this.#model.updateOne(
       {
         _id: new Types.ObjectId(episodeDto.course_id),
@@ -42,6 +39,31 @@ class EpisodesService {
     ]);
     if (!course) throw new createHttpError.NotFound(CourseMessages.NotFound);
     return course;
+  }
+  async update(episodeDto) {
+    const episode = await this.#model.findOne({
+      _id: new Types.ObjectId(episodeDto.course_id),
+      "seasons.$.episodes._id": new Types.ObjectId(episodeDto.episode_id),
+    });
+    if (!episode)
+      throw new createHttpError.NotFound(EpisodeMessages.NotFoundCourse);
+    const { episode_id, course_id, ...updateData } = episodeDto;
+    await this.#model.updateOne(
+      {
+        _id: episodeDto.course_id,
+        "seasons.episodes._id": episode_id,
+      },
+      {
+        $set: {
+          "seasons.$[].episodes.$[episodeElement]": updateData,
+        },
+      },
+      {
+        arrayFilters: [{ "episodeElement._id": episode_id }],
+        new: true,
+      },
+    );
+    return true;
   }
 }
 

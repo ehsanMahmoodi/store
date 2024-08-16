@@ -55,5 +55,37 @@ class EpisodesController {
       next(error);
     }
   }
+  async update(req, res, next) {
+    try {
+      const {
+        course_id,
+        episode_id,
+        title,
+        description,
+        isFreeAccess,
+        video,
+        time,
+        attachment,
+      } = req.body;
+      await this.#service.update({
+        course_id,
+        episode_id,
+        title,
+        description,
+        isFreeAccess,
+        video,
+        time,
+        attachment,
+      });
+      res.status(httpCodes.OK).send({
+        statusCode: res.statusCode,
+        data: {
+          message: EpisodeMessages.Updated,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = { EpisodesController: new EpisodesController() };

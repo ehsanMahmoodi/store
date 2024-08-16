@@ -7,6 +7,11 @@ router.post(
   uploadFile("episode", "movie").single("attachment"),
   EpisodesController.create,
 );
+router.patch(
+  "/update",
+  uploadFile("episode", "movie").single("attachment"),
+  EpisodesController.update,
+);
 module.exports = {
   EpisodeRoutes: router,
 };
